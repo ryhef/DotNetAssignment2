@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Assignment2.Data;
 using Assignment2.Models;
+using Assignment2.Models.ViewModels;
 
 namespace Assignment2.Controllers
 {
@@ -20,9 +21,39 @@ namespace Assignment2.Controllers
         }
 
         // GET: Clients
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
-              return View(await _context.Clients.ToListAsync());
+
+            var viewModel = new BrokerageViewModel
+            {
+                Clients = await _context.Clients
+              .Include(i => i.Subscriptions)
+              .AsNoTracking()
+              .OrderBy(i => i)
+              .ToListAsync()
+            };
+            if (id != null)
+            {
+                ViewData["ClientID"] = id;
+                
+                var x = _context.Subscriptions.Where(x => x.ClientId == id).ToList();
+                viewModel.Brokerages = Enumerable.Empty<Brokerage>();
+                foreach (Subscription y in x)
+                {
+                    if (viewModel.Brokerages == null)
+                    {
+                       
+                        viewModel.Brokerages = _context.Brokerages.Where(x => x.Id == y.BrokerageId);
+                    }
+                    else
+                    {
+                        viewModel.Brokerages = viewModel.Brokerages.Append(_context.Brokerages.Where(x => x.Id == y.BrokerageId).Single());
+                    }
+                }
+
+            }
+
+            return View(viewModel);
         }
 
         // GET: Clients/Details/5

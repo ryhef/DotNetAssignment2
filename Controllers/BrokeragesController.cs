@@ -42,7 +42,7 @@ namespace Assignment2.Controllers
                 //                from x2 in x
                 //              where x2.;
                 var x = _context.Subscriptions.Where(x => x.BrokerageId == id).ToList();
-
+                viewModel.Clients = Enumerable.Empty<Client>();
                 foreach (Subscription y in x) {
                     if (viewModel.Clients == null)
                     {

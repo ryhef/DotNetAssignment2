@@ -14,7 +14,7 @@ namespace Assignment2
                 try
                 {
                     var context = services.GetRequiredService<MarketDbContext>();
-                    DbInitializer.Initialize(context);
+                    
                 }
                 catch (Exception ex)
                 {
