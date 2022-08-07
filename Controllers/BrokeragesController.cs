@@ -35,12 +35,6 @@ namespace Assignment2.Controllers
             if (id != null)
             {
                 ViewData["BrokerageID"] = id;
-                //viewModel.Clients = viewModel.Clients.Where(x => x.Id == viewModel.Subscriptions.Where(x => x.BrokerageId == id));
-                //viewModel.Clients =  viewModel.Clients.Where(x => x)
-                //viewModel.Clients = from subs in viewModel.Subscriptions
-                //                  join clients in viewModel.Clients on subs.ClientId equals clients.Id into x
-                //                from x2 in x
-                //              where x2.;
                 var x = _context.Subscriptions.Where(x => x.BrokerageId == id).ToList();
                 viewModel.Clients = Enumerable.Empty<Client>();
                 foreach (Subscription y in x) {

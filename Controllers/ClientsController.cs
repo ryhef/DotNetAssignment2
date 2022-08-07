@@ -35,14 +35,14 @@ namespace Assignment2.Controllers
             if (id != null)
             {
                 ViewData["ClientID"] = id;
-                
+
                 var x = _context.Subscriptions.Where(x => x.ClientId == id).ToList();
                 viewModel.Brokerages = Enumerable.Empty<Brokerage>();
                 foreach (Subscription y in x)
                 {
                     if (viewModel.Brokerages == null)
                     {
-                       
+
                         viewModel.Brokerages = _context.Brokerages.Where(x => x.Id == y.BrokerageId);
                     }
                     else
@@ -179,14 +179,69 @@ namespace Assignment2.Controllers
             {
                 _context.Clients.Remove(client);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ClientExists(int id)
         {
-          return _context.Clients.Any(e => e.Id == id);
+            return _context.Clients.Any(e => e.Id == id);
         }
+
+        //POST: Clients/EditSubscriptions/5
+        public async Task<IActionResult> EditSubscriptions(int id)
+        {
+            var viewModel = new ClientSubscriptionsViewModel
+            {
+                Client = await _context.Clients.FindAsync(id),
+              
+            };
+            var x = await _context.Brokerages.Include(i => i.Subscriptions).ToListAsync();
+            viewModel.Subscriptions = Enumerable.Empty<BrokerageSubscriptionsViewModel>();
+            foreach (var brokerage in x) {
+                viewModel.Subscriptions = viewModel.Subscriptions
+                    .Append(new BrokerageSubscriptionsViewModel 
+                    { 
+                        BrokerageId = brokerage.Id, 
+                        Title = brokerage.Title, 
+                        IsMember = brokerage.Subscriptions.Any(x => x.ClientId == id) 
+                    });
+            }
+            
+            return View(viewModel);
+        }
+        
+        //POST: Clients/AddSubscriptions?clientId=5&brokerageId=A1
+        public IActionResult AddSubscriptions(int clientId, string brokerageId)
+        {
+            Subscription addSub = new Subscription() {
+                ClientId = clientId,
+                BrokerageId = brokerageId
+            };
+            _context.Subscriptions.Add(addSub);
+            _context.SaveChanges();
+            string returnString = "EditSubScriptions/" + clientId;
+            var returnClient = _context.Clients.Where(x => x.Id == clientId).Single();
+            return RedirectToAction("EditSubScriptions",returnClient);
+        }
+
+        //POST: Clients/RemoveSubscriptions?clientId=5&brokerageId=A1
+        public IActionResult RemoveSubscriptions(int clientId, string brokerageId)
+        {
+            Subscription removeSub = new Subscription()
+            {
+                ClientId = clientId,
+                BrokerageId = brokerageId
+            };
+            var findSub = _context.Subscriptions.Where(x => x.ClientId == clientId&&x.BrokerageId == brokerageId).Single();
+            _context.Subscriptions.Remove(findSub);
+            _context.SaveChanges();
+            var returnClient = _context.Clients.Where(x => x.Id == clientId).Single();
+
+            return RedirectToAction("EditSubScriptions", returnClient);
+
+        }
+        
     }
 }

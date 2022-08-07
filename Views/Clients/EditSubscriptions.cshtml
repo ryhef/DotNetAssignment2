@@ -1,0 +1,50 @@
+﻿@model Assignment2.Models.ViewModels.ClientSubscriptionsViewModel
+
+@{
+    ViewData["Title"] = "Edit Subscriptions";
+}
+<h1>Edit Subscriptions</h1>
+<div>
+<h4>Client</h4>
+<hr />
+<dl class="row">
+    <dt class="col-sm-2">
+        Full Name
+    </dt>
+    <dd class="col-sm-10">
+        @Model.Client.FullName
+    </dd>
+</dl>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <table>
+            @foreach (var item in Model.Subscriptions)
+        {
+                <tr>
+                    <td>
+                            @item.Title
+                    </td>
+                     <td>
+                        @if (item.IsMember == true)
+                        {
+                            <a href="/Clients/RemoveSubscriptions?clientid=@Model.Client.Id&brokerageID=@item.BrokerageId">Unsubscribe</a>
+                        }
+                        else
+                        {
+                           <a href="/Clients/AddSubscriptions?clientid=@Model.Client.Id&brokerageID=@item.BrokerageId">Subscribe</a> 
+                        }
+                    </td>
+            </tr>
+        }
+        </table>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
