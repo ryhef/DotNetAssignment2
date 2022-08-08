@@ -21,22 +21,46 @@
         <table>
             @foreach (var item in Model.Subscriptions)
         {
-                <tr>
-                    <td>
+                @if (item.IsMember == true)
+                {
+                    <tr>
+                        <td>
                             @item.Title
-                    </td>
-                     <td>
-                        @if (item.IsMember == true)
-                        {
-                            <a href="/Clients/RemoveSubscriptions?clientid=@Model.Client.Id&brokerageID=@item.BrokerageId">Unsubscribe</a>
-                        }
-                        else
-                        {
-                           <a href="/Clients/AddSubscriptions?clientid=@Model.Client.Id&brokerageID=@item.BrokerageId">Subscribe</a> 
-                        }
-                    </td>
-            </tr>
-        }
+                        </td>
+                        <td>
+                            @if (item.IsMember == true)
+                            {
+                                <a href="/Clients/RemoveSubscriptions?clientid=@Model.Client.Id&brokerageID=@item.BrokerageId">Unsubscribe</a>
+                            }
+                            else
+                            {
+                                <a href="/Clients/AddSubscriptions?clientid=@Model.Client.Id&brokerageID=@item.BrokerageId">Subscribe</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+             @foreach (var item in Model.Subscriptions)
+        {
+                @if (item.IsMember == false)
+                {
+                    <tr>
+                        <td>
+                            @item.Title
+                        </td>
+                        <td>
+                            @if (item.IsMember == true)
+                            {
+                                <a href="/Clients/RemoveSubscriptions?clientid=@Model.Client.Id&brokerageID=@item.BrokerageId">Unsubscribe</a>
+                            }
+                            else
+                            {
+                                <a href="/Clients/AddSubscriptions?clientid=@Model.Client.Id&brokerageID=@item.BrokerageId">Subscribe</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
         </table>
     </div>
 </div>

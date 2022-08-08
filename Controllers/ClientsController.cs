@@ -208,7 +208,7 @@ namespace Assignment2.Controllers
                         IsMember = brokerage.Subscriptions.Any(x => x.ClientId == id) 
                     });
             }
-            
+            viewModel.Subscriptions = viewModel.Subscriptions.OrderBy(x => x.Title);
             return View(viewModel);
         }
         
