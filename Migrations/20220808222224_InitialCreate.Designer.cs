@@ -4,6 +4,7 @@ using Assignment2.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Assignment2.Migrations
 {
     [DbContext(typeof(MarketDbContext))]
-    partial class MarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220808222224_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,32 +23,6 @@ namespace Assignment2.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("Assignment2.Models.Ad", b =>
-                {
-                    b.Property<int>("AdId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdId"), 1L, 1);
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("brokerageId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("AdId");
-
-                    b.HasIndex("brokerageId");
-
-                    b.ToTable("ad", (string)null);
-                });
 
             modelBuilder.Entity("Assignment2.Models.Brokerage", b =>
                 {
@@ -107,13 +83,6 @@ namespace Assignment2.Migrations
                     b.ToTable("Subscriptions");
                 });
 
-            modelBuilder.Entity("Assignment2.Models.Ad", b =>
-                {
-                    b.HasOne("Assignment2.Models.Brokerage", null)
-                        .WithMany("Ads")
-                        .HasForeignKey("brokerageId");
-                });
-
             modelBuilder.Entity("Assignment2.Models.Subscription", b =>
                 {
                     b.HasOne("Assignment2.Models.Brokerage", null)
@@ -131,8 +100,6 @@ namespace Assignment2.Migrations
 
             modelBuilder.Entity("Assignment2.Models.Brokerage", b =>
                 {
-                    b.Navigation("Ads");
-
                     b.Navigation("Subscriptions");
                 });
 

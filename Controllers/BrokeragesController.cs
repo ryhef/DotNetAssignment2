@@ -152,11 +152,13 @@ namespace Assignment2.Controllers
 
             var brokerage = await _context.Brokerages
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (brokerage == null)
             {
                 return NotFound();
             }
 
+            
             return View(brokerage);
         }
 
@@ -169,7 +171,12 @@ namespace Assignment2.Controllers
             {
                 return Problem("Entity set 'MarketDbContext.Brokerages'  is null.");
             }
+           
             var brokerage = await _context.Brokerages.FindAsync(id);
+            if (_context.Ads.Where(x=>x.brokerageId == id).Count() != 0)
+            {
+                return View("Error",brokerage);
+            }
             if (brokerage != null)
             {
                 _context.Brokerages.Remove(brokerage);
@@ -177,6 +184,12 @@ namespace Assignment2.Controllers
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Error(string id) {
+            var brokerage = _context.Brokerages.FindAsync(id);
+
+            return View();
         }
 
         private bool BrokerageExists(string id)

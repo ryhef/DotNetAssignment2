@@ -19,5 +19,6 @@ namespace Assignment2.Models
         public decimal Fee { get; set; }
 
         public IEnumerable<Subscription> Subscriptions { get; set; }
+        public IEnumerable<Ad> Ads { get; set; }
     }
 }

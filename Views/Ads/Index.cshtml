@@ -1,0 +1,42 @@
+﻿@model Assignment2.Models.ViewModels.AdsViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create" asp-route-id="@Model.Brokerage.Id">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                FileName
+            </th>
+            <th>
+                Url
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Ads) {
+        <tr>
+            <td>
+               <img src="@item.Url" style="max-width: 400px;" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FileName)
+            </td>
+            <td>
+                <a asp-action="Delete" asp-route-id="@item.AdId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<div>
+    <a asp-controller="Brokerages"asp-action="Index">Back to Brokerages</a>
+</div>

@@ -3,7 +3,7 @@
     public class AdsViewModel
     {
         public Brokerage Brokerage { get; set; }
-        public IEnumerable<Ad> Advertisements { get; set; }
+        public IEnumerable<Ad> Ads { get; set; }
 
     }
 }

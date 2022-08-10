@@ -1,5 +1,7 @@
 ﻿using Assignment2.Data;
+using Azure.Storage.Blobs;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace Assignment2
 {
@@ -17,6 +19,11 @@ namespace Assignment2
             var connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<MarketDbContext>(options => options.UseSqlServer(connection));
             services.AddControllersWithViews();
+
+            var blobConnection = Configuration.GetConnectionString("AzureBlobStorage");
+            services.AddSingleton(new BlobServiceClient(blobConnection));
+
+            
 
         }
 
@@ -43,4 +50,5 @@ namespace Assignment2
             });
         }
     }
+
 }
